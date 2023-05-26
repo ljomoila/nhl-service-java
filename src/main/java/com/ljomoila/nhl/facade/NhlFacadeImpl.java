@@ -44,22 +44,22 @@ public class NhlFacadeImpl implements NhlFacade {
     }
 
     private Game constructGame(LiveFeed liveFeed, List<Team> teams) {
-        GameData gameData = liveFeed.getGame();
-        LinkedTreeMap feedData = liveFeed.getFeed();
+        GameData gameData = liveFeed.getGameData();
+        LiveData liveData = liveFeed.getLiveData();
 
         Game.GameStatus status = Game.GameStatus.valueOf(gameData.getStatus().getDetailedState());
 
-        LinkedTreeMap lineScore = (LinkedTreeMap) feedData.get("linescore");
-        String period = (String) lineScore.get("currentPeriodOrdinal");
-        String timeRemaining = (String) lineScore.get("currentPeriodTimeRemaining");
+        LineScore lineScore = liveData.getLineScore();
+        String period = lineScore.getCurrentPeriodOrdinal();
+        String timeRemaining = lineScore.getCurrentPeriodTimeRemaining();
 
         if (status != Game.GameStatus.Final) {
             timeRemaining = period + "\n" + timeRemaining.toUpperCase() + ")";
         }
 
-        LinkedTreeMap boxScore = (LinkedTreeMap) feedData.get("boxscore");
-        LinkedTreeMap teamBoxScores = (LinkedTreeMap) boxScore.get("teams");
-        LinkedTreeMap teamLineScores = (LinkedTreeMap) lineScore.get("teams");
+        BoxScore boxScore = liveData.getBoxScore();
+        LinkedTreeMap teamBoxScores = boxScore.getTeams();
+        LinkedTreeMap teamLineScores = lineScore.getTeams();
 
         GameTeam homeTeam = this.constructGameTeam((LinkedTreeMap) teamLineScores.get("home"),
                 (LinkedTreeMap) teamBoxScores.get("home"));

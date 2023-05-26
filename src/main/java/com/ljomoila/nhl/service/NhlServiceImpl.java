@@ -77,20 +77,20 @@ public class NhlServiceImpl implements NhlService {
         try {
             String json = this.nhlClient.get(gamePath);
 
-            Map<String, Object> retMap = new Gson().fromJson(
-                    json, new TypeToken<HashMap<String, Object>>() {}.getType()
-            );
+//            Map<String, Object> retMap = new Gson().fromJson(
+//                    json, new TypeToken<HashMap<String, Object>>() {}.getType()
+//            );
+//
+//            // TODO: create POJO's
+//            LinkedTreeMap feed = (LinkedTreeMap) retMap.get("liveData");
+//
+//            String gameDataJson = new Gson().toJson(retMap.get("gameData"));
+//            GameData gameData = new Gson().fromJson(gameDataJson, new TypeToken<GameData>(){}.getType());
+//
+//            String feedDataJson = new Gson().toJson(retMap.get("liveData"));
+            LiveFeed liveFeed = new Gson().fromJson(json, new TypeToken<LiveFeed>(){}.getType());
 
-            // TODO: create POJO's
-            LinkedTreeMap feed = (LinkedTreeMap) retMap.get("liveData");
-
-            String gameDataJson = new Gson().toJson(retMap.get("gameData"));
-            GameData gameData = new Gson().fromJson(gameDataJson, new TypeToken<GameData>(){}.getType());
-
-            String feedDataJson = new Gson().toJson(retMap.get("liveData"));
-            FeedData feedData = new Gson().fromJson(feedDataJson, new TypeToken<FeedData>(){}.getType());
-
-            return new LiveFeed(feed, gameData);
+            return liveFeed;
         } catch(Exception e) {
             throw e;
         }

@@ -3,19 +3,19 @@ package com.ljomoila.nhl.domain;
 import com.google.gson.internal.LinkedTreeMap;
 
 public class LiveFeed {
-    private LinkedTreeMap feed;
-    private GameData game;
+    private LiveData liveData;
+    private GameData gameData;
 
-    public LiveFeed(LinkedTreeMap feed, GameData game) {
-        this.feed = feed;
-        this.game = game;
+    public LiveFeed(LiveData liveData, GameData game) {
+        this.liveData = liveData;
+        this.gameData = game;
     }
 
-    public LinkedTreeMap getFeed() {
-        return feed;
+    public LiveData getLiveData() {
+        return liveData;
     }
 
-    public GameData getGame() {
-        return game;
+    public GameData getGameData() {
+        return gameData;
     }
 }
