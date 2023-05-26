@@ -67,7 +67,6 @@ public class NhlServiceImpl implements NhlService {
             for (LinkedTreeMap game : games) {
                 gamePaths.add((String) game.get("link"));
             }
-            String test = new Gson().toJson(gamePaths);
 
             return gamePaths;
         } catch(Exception e) {
@@ -79,9 +78,9 @@ public class NhlServiceImpl implements NhlService {
     public LiveFeed getLiveFeed(String gamePath) {
         try {
             String json = this.nhlClient.get(gamePath);
-            LiveFeed liveFeed = new Gson().fromJson(json, new TypeToken<LiveFeed>(){}.getType());
 
-            String test = new Gson().toJson(liveFeed);
+            Type liveFeedType = new TypeToken<LiveFeed>(){}.getType();
+            LiveFeed liveFeed = new Gson().fromJson(json, liveFeedType);
 
             return liveFeed;
         } catch(Exception e) {
