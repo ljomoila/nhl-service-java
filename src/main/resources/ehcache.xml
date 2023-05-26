@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <defaultCache eternal="true" maxElementsInMemory="100" timeToIdleSeconds="1" timeToLiveSeconds="1" overflowToDisk="false" />
+    <cache name="liveFeed"
+           maxElementsInMemory="1000"
+           timeToIdleSeconds="1"
+           timeToLiveSeconds="1"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU" />
+</ehcache>
