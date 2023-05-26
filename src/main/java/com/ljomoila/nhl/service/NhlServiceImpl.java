@@ -22,7 +22,9 @@ public class NhlServiceImpl implements NhlService {
             String json = this.nhlClient.get(NhlClient.API_PATH + "/teams");
 
             Type teamListType = new TypeToken<ArrayList<Team>>(){}.getType();
-            return new Gson().fromJson(getJsonStringByKey(json, "teams"), teamListType);
+            List<Team> teams = new Gson().fromJson(getJsonStringByKey(json, "teams"), teamListType);
+
+            return teams;
         } catch(Exception e) {
             throw e;
         }
@@ -65,6 +67,7 @@ public class NhlServiceImpl implements NhlService {
             for (LinkedTreeMap game : games) {
                 gamePaths.add((String) game.get("link"));
             }
+            String test = new Gson().toJson(gamePaths);
 
             return gamePaths;
         } catch(Exception e) {
@@ -76,19 +79,9 @@ public class NhlServiceImpl implements NhlService {
     public LiveFeed getLiveFeed(String gamePath) {
         try {
             String json = this.nhlClient.get(gamePath);
-
-//            Map<String, Object> retMap = new Gson().fromJson(
-//                    json, new TypeToken<HashMap<String, Object>>() {}.getType()
-//            );
-//
-//            // TODO: create POJO's
-//            LinkedTreeMap feed = (LinkedTreeMap) retMap.get("liveData");
-//
-//            String gameDataJson = new Gson().toJson(retMap.get("gameData"));
-//            GameData gameData = new Gson().fromJson(gameDataJson, new TypeToken<GameData>(){}.getType());
-//
-//            String feedDataJson = new Gson().toJson(retMap.get("liveData"));
             LiveFeed liveFeed = new Gson().fromJson(json, new TypeToken<LiveFeed>(){}.getType());
+
+            String test = new Gson().toJson(liveFeed);
 
             return liveFeed;
         } catch(Exception e) {
