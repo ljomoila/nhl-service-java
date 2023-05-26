@@ -1,21 +1,24 @@
 package com.ljomoila.nhl.integration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Component
 public class NhlClient {
 
-    // TODO: move to environment variables
+    // TODO: move to properties
     private static final String API_BASE_URL = "https://statsapi.web.nhl.com";
     public static final String API_PATH = "/api/v1";
 
     public String get(String path) {
         try {
-            java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
+            HttpClient client = java.net.http.HttpClient.newHttpClient();
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(API_BASE_URL + path))
@@ -33,7 +36,6 @@ public class NhlClient {
                 throw new RuntimeException("Invalid response");
             }
 
-            //System.out.println(response.body());
             return response.body();
         } catch (IOException e) {
             e.printStackTrace();

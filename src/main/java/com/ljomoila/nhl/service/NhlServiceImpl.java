@@ -5,6 +5,7 @@ import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 import com.ljomoila.nhl.domain.*;
 import com.ljomoila.nhl.integration.NhlClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -13,13 +14,18 @@ import java.util.*;
 
 @Component
 public class NhlServiceImpl implements NhlService {
-    private final NhlClient nhlClient = new NhlClient();
+    private final NhlClient client;
+
+    @Autowired
+    public NhlServiceImpl(NhlClient client) {
+        this.client = client;
+    }
 
     @Override
     @Cacheable("teams")
     public List<Team> getTeams() {
         try {
-            String json = this.nhlClient.get(NhlClient.API_PATH + "/teams");
+            String json = this.client.get(NhlClient.API_PATH + "/teams");
 
             Type teamListType = new TypeToken<ArrayList<Team>>(){}.getType();
             List<Team> teams = new Gson().fromJson(getJsonStringByKey(json, "teams"), teamListType);
@@ -34,7 +40,7 @@ public class NhlServiceImpl implements NhlService {
     @Cacheable(value = "player", key = "#link")
     public Player getPlayer(String link) {
         try {
-            String json = this.nhlClient.get(link);
+            String json = this.client.get(link);
 
             Map<String, Object> retMap = new Gson().fromJson(
                     json, new TypeToken<HashMap<String, Object>>() {}.getType()
@@ -53,7 +59,7 @@ public class NhlServiceImpl implements NhlService {
     @Cacheable(value = "games", key = "#date")
     public List<String> getScheduleGamesByDate(String date) {
         try {
-            String json = this.nhlClient.get(NhlClient.API_PATH + "/schedule?date=" + date);
+            String json = this.client.get(NhlClient.API_PATH + "/schedule?date=" + date);
 
             Map<String, Object> retMap = new Gson().fromJson(
                     json, new TypeToken<HashMap<String, Object>>() {}.getType()
@@ -77,7 +83,7 @@ public class NhlServiceImpl implements NhlService {
     @Override
     public LiveFeed getLiveFeed(String gamePath) {
         try {
-            String json = this.nhlClient.get(gamePath);
+            String json = this.client.get(gamePath);
 
             Type liveFeedType = new TypeToken<LiveFeed>(){}.getType();
             LiveFeed liveFeed = new Gson().fromJson(json, liveFeedType);

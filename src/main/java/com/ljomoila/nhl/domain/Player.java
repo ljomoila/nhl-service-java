@@ -1,14 +1,17 @@
 package com.ljomoila.nhl.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.gson.annotations.SerializedName;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Player {
     private int id;
-    private String name;
+    private String fullName;
     private String lastName;
     private String nationality;
+    @SerializedName("link")
     private String apiLink;
+
     private PlayerPosition position = PlayerPosition.Skater;
 
     public Player() {
@@ -16,7 +19,7 @@ public class Player {
 
     public Player(int id, String fullName, String lastName, String nationality, String apiLink) {
         this.id = id;
-        this.name = fullName;
+        this.fullName = fullName;
         this.lastName = lastName;
         this.nationality = nationality;
         this.apiLink = apiLink;
@@ -26,8 +29,8 @@ public class Player {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getLastName() {
@@ -50,7 +53,7 @@ public class Player {
     public String toString() {
         return "Player{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + fullName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", nationality='" + nationality + '\'' +
                 ", apiLink='" + apiLink + '\'' +

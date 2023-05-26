@@ -31,9 +31,9 @@ public class NhlFacadeImplTest {
 
     @Before
     public void setUp() {
-        facade =  new NhlFacadeImpl(service);
-
         when(service.getTeams()).thenReturn(new Gson().fromJson("[{\"id\":1,\"name\":\"New Jersey Devils\",\"shortName\":\"New Jersey\",\"abbreviation\":\"NJD\"},{\"id\":2,\"name\":\"New York Islanders\",\"shortName\":\"NY Islanders\",\"abbreviation\":\"NYI\"}]", new TypeToken<ArrayList<Team>>(){}.getType()));
+
+        facade =  new NhlFacadeImpl(service);
     }
 
     @Test
