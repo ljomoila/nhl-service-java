@@ -39,6 +39,21 @@ public class NhlServiceImplTest {
     }
 
     @Test
+    public void testGetTeamsThrows() {
+        // given
+        when(client.get(NhlClient.API_PATH + "/teams")).thenThrow(RuntimeException.class);
+
+        try {
+            // when
+            service.getTeams();
+            assertEquals(false, true);
+        } catch (Exception e) {
+            // then
+            assertEquals(true, true);
+        }
+    }
+
+    @Test
     public void testGetPlayer() {
         // given
         when(client.get("/player")).thenReturn("{\"copyright\":\"NHL\",\"people\":[{\"id\":1,\"fullName\":\"Warren Foegele\",\"link\":\"/api/v1/people/1\",\"firstName\":\"Warren\",\"lastName\":\"Foegele\",\"primaryNumber\":\"37\",\"birthDate\":\"1996-04-01\",\"currentAge\":27,\"birthCity\":\"Markham\",\"birthStateProvince\":\"ON\",\"birthCountry\":\"CAN\",\"nationality\":\"CAN\",\"height\":\"6' 2\\\"\",\"weight\":198,\"active\":true,\"alternateCaptain\":false,\"captain\":false,\"rookie\":false,\"shootsCatches\":\"L\",\"rosterStatus\":\"Y\",\"currentTeam\":{\"id\":22,\"name\":\"Edmonton Oilers\",\"link\":\"/api/v1/teams/22\"},\"primaryPosition\":{\"code\":\"L\",\"name\":\"Left Wing\",\"type\":\"Forward\",\"abbreviation\":\"LW\"}}]  }");
@@ -52,6 +67,21 @@ public class NhlServiceImplTest {
         assertEquals("Foegele", player.getLastName());
         assertEquals("CAN", player.getNationality());
         assertEquals("/api/v1/people/1", player.getApiLink());
+    }
+
+    @Test
+    public void testGetPlayerThrows() {
+        // given
+        when(client.get("/player")).thenThrow(RuntimeException.class);
+
+        try {
+            // when
+            service.getPlayer("/player");
+            assertEquals(false, true);
+        } catch (Exception e) {
+            // then
+            assertEquals(true, true);
+        }
     }
 
     // TOD0: live feed and scheduled games

@@ -51,6 +51,7 @@ public class Game {
 
     public enum GameStatus {
         InProgress,
-        Final
+        Final,
+        Scheduled
     }
 }

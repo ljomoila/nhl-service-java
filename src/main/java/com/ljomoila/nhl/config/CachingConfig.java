@@ -1,6 +1,5 @@
 package com.ljomoila.nhl.config;
 
-
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -26,4 +25,5 @@ public class CachingConfig {
 
         return cacheManager;
     }
+
 }

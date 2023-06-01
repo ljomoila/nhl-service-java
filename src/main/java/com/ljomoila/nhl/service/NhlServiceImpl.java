@@ -48,8 +48,9 @@ public class NhlServiceImpl implements NhlService {
 
             List<LinkedTreeMap> playerMap = (List<LinkedTreeMap>) Arrays.asList(retMap.get("people")).get(0);
             String playerJson = new Gson().toJson(playerMap.get(0));
+            Player player = new Gson().fromJson(playerJson, new TypeToken<Player>(){}.getType());
 
-            return new Gson().fromJson(playerJson, new TypeToken<Player>(){}.getType());
+            return player;
         } catch(Exception e) {
             throw e;
         }
@@ -67,6 +68,9 @@ public class NhlServiceImpl implements NhlService {
 
             // TODO: create POJO's
             List<LinkedTreeMap> dates = (List<LinkedTreeMap>) Arrays.asList(retMap.get("dates")).get(0);
+
+            if (dates.size() == 0) return Collections.emptyList();
+
             List<LinkedTreeMap> games = (List<LinkedTreeMap>) dates.get(0).get("games");
 
             List<String> gamePaths = new ArrayList<>();

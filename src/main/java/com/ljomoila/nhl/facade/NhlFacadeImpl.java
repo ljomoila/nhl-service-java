@@ -53,7 +53,7 @@ public class NhlFacadeImpl implements NhlFacade {
         String period = lineScore.getCurrentPeriodOrdinal();
         String timeRemaining = lineScore.getCurrentPeriodTimeRemaining();
 
-        if (status != Game.GameStatus.Final) {
+        if (period != null && timeRemaining != null) {
             timeRemaining = period + "\n" + timeRemaining.toUpperCase() + ")";
         }
 
@@ -103,7 +103,7 @@ public class NhlFacadeImpl implements NhlFacade {
             String playerApiLink = (String) person.get("link");
             GamePlayer playerWithStats = null;
 
-            if (skaterStats != null)  playerWithStats = this.constructSkater(playerApiLink, skaterStats);
+            if (skaterStats != null) playerWithStats = this.constructSkater(playerApiLink, skaterStats);
             else if (goalieStats != null) playerWithStats = this.constructGoalie(playerApiLink, goalieStats);
 
             if (playerWithStats != null) playersWithStats.add((playerWithStats));
