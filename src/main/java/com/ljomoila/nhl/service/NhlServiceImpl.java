@@ -25,7 +25,7 @@ public class NhlServiceImpl implements NhlService {
     @Cacheable("teams")
     public List<Team> getTeams() {
         try {
-            String json = this.client.get(NhlClient.API_PATH + "/teams");
+            String json = this.client.get("/teams");
 
             Type teamListType = new TypeToken<ArrayList<Team>>(){}.getType();
             List<Team> teams = new Gson().fromJson(getJsonStringByKey(json, "teams"), teamListType);
@@ -60,7 +60,7 @@ public class NhlServiceImpl implements NhlService {
     @Cacheable(value = "games", key = "#date")
     public List<String> getScheduleGamesByDate(String date) {
         try {
-            String json = this.client.get(NhlClient.API_PATH + "/schedule?date=" + date);
+            String json = this.client.get("/schedule?date=" + date);
 
             Map<String, Object> retMap = new Gson().fromJson(
                     json, new TypeToken<HashMap<String, Object>>() {}.getType()
