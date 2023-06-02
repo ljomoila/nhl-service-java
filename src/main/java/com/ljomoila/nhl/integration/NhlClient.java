@@ -25,8 +25,7 @@ public class NhlClient {
 
     public String get(String path) {
         try {
-            String url = constructUrlWithPath(path);
-            ResponseEntity<String> response = this.restTemplate.getForEntity(url, String.class);
+            ResponseEntity<String> response = this.restTemplate.getForEntity(constructUrlWithPath(path), String.class);
 
             if (response.getStatusCodeValue() != HttpStatus.SC_OK) {
                 throw new NhlException("Invalid status", org.springframework.http.HttpStatus.valueOf(response.getStatusCodeValue()));
