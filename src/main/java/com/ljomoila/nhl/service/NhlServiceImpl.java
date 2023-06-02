@@ -24,78 +24,62 @@ public class NhlServiceImpl implements NhlService {
     @Override
     @Cacheable("teams")
     public List<Team> getTeams() {
-        try {
-            String json = this.client.get("/teams");
+        String json = this.client.get("/teams");
 
-            Type teamListType = new TypeToken<ArrayList<Team>>(){}.getType();
-            List<Team> teams = new Gson().fromJson(getJsonStringByKey(json, "teams"), teamListType);
+        Type teamListType = new TypeToken<ArrayList<Team>>(){}.getType();
+        List<Team> teams = new Gson().fromJson(getJsonStringByKey(json, "teams"), teamListType);
 
-            return teams;
-        } catch(Exception e) {
-            throw e;
-        }
+        return teams;
     }
 
     @Override
     @Cacheable(value = "player", key = "#link")
     public Player getPlayer(String link) {
-        try {
-            String json = this.client.get(link);
+        String json = this.client.get(link);
 
-            Map<String, Object> retMap = new Gson().fromJson(
-                    json, new TypeToken<HashMap<String, Object>>() {}.getType()
-            );
+        Map<String, Object> retMap = new Gson().fromJson(
+                json, new TypeToken<HashMap<String, Object>>() {}.getType()
+        );
 
-            List<LinkedTreeMap> playerMap = (List<LinkedTreeMap>) Arrays.asList(retMap.get("people")).get(0);
-            String playerJson = new Gson().toJson(playerMap.get(0));
-            Player player = new Gson().fromJson(playerJson, new TypeToken<Player>(){}.getType());
+        List<LinkedTreeMap> playerMap = (List<LinkedTreeMap>) Arrays.asList(retMap.get("people")).get(0);
+        String playerJson = new Gson().toJson(playerMap.get(0));
+        Player player = new Gson().fromJson(playerJson, new TypeToken<Player>(){}.getType());
 
-            return player;
-        } catch(Exception e) {
-            throw e;
-        }
+        return player;
     }
 
     @Override
     @Cacheable(value = "games", key = "#date")
     public List<String> getScheduleGamesByDate(String date) {
-        try {
-            String json = this.client.get("/schedule?date=" + date);
+        String json = this.client.get("/schedule?date=" + date);
 
-            Map<String, Object> retMap = new Gson().fromJson(
-                    json, new TypeToken<HashMap<String, Object>>() {}.getType()
-            );
+        Map<String, Object> retMap = new Gson().fromJson(
+                json, new TypeToken<HashMap<String, Object>>() {}.getType()
+        );
 
-            // TODO: create POJO's
-            List<LinkedTreeMap> dates = (List<LinkedTreeMap>) Arrays.asList(retMap.get("dates")).get(0);
+        // TODO: create POJO's
+        List<LinkedTreeMap> dates = (List<LinkedTreeMap>) Arrays.asList(retMap.get("dates")).get(0);
 
-            if (dates.size() == 0) return Collections.emptyList();
+        if (dates.size() == 0) return Collections.emptyList();
 
-            List<LinkedTreeMap> games = (List<LinkedTreeMap>) dates.get(0).get("games");
+        List<LinkedTreeMap> games = (List<LinkedTreeMap>) dates.get(0).get("games");
 
-            List<String> gamePaths = new ArrayList<>();
-            for (LinkedTreeMap game : games) {
-                gamePaths.add((String) game.get("link"));
-            }
-
-            return gamePaths;
-        } catch(Exception e) {
-            throw e;
+        List<String> gamePaths = new ArrayList<>();
+        for (LinkedTreeMap game : games) {
+            gamePaths.add((String) game.get("link"));
         }
+
+        return gamePaths;
     }
 
     @Override
     public LiveFeed getLiveFeed(String gamePath) {
-        try {
-            String json = this.client.get(gamePath);
+        String json = this.client.get(gamePath);
 
-            Type liveFeedType = new TypeToken<LiveFeed>(){}.getType();
-            LiveFeed liveFeed = new Gson().fromJson(json, liveFeedType);
+        Type liveFeedType = new TypeToken<LiveFeed>(){}.getType();
+        LiveFeed liveFeed = new Gson().fromJson(json, liveFeedType);
 
-            return liveFeed;
-        } catch(Exception e) {
-            throw e;
-        }
+        return liveFeed;
     }
 
     private static String getJsonStringByKey(String json, String key) {
