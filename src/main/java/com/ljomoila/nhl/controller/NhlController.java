@@ -6,6 +6,7 @@ import com.ljomoila.nhl.domain.Player;
 import com.ljomoila.nhl.domain.Team;
 import com.ljomoila.nhl.exception.NhlException;
 import com.ljomoila.nhl.facade.NhlFacadeImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,7 @@ public class NhlController {
     public List<Team> getTeams() {
         logger.info("Getting teams");
 
-        try {
-            return facade.getTeams();
-        }
-        catch (Exception exc) {
-            throw generateAndLogException("Failed to get teams", exc);
-        }
+        return facade.getTeams();
     }
 
     @GetMapping("/player/{apiLink}")
@@ -46,12 +42,7 @@ public class NhlController {
     public Player getPlayer(@PathVariable String apiLink) {
         logger.info("Getting player with api link: " +  apiLink);
 
-        try {
-            return facade.getPlayer(apiLink);
-        }
-        catch (Exception exc) {
-            throw generateAndLogException("Failed to get player with api link: " + apiLink , exc);
-        }
+        return facade.getPlayer(apiLink);
     }
 
     @GetMapping("/player/{id}/stats/{type}")
@@ -59,12 +50,7 @@ public class NhlController {
     public LinkedTreeMap getPlayerStats(@PathVariable int id, @PathVariable String type) {
         logger.info("Getting player stats: " +  id + " type: " + type);
 
-        try {
-            return facade.getPlayerStats(id, type);
-        }
-        catch (Exception exc) {
-            throw generateAndLogException("Failed to get player stats", exc);
-        }
+        return facade.getPlayerStats(id, type);
     }
 
     @GetMapping("/games/{date}")
@@ -72,12 +58,7 @@ public class NhlController {
     public List<Game> getGames(@PathVariable String date) {
         logger.info("Getting games for date: " +  date);
 
-        try {
-            return facade.getGames(date);
-        }
-        catch (Exception exc) {
-            throw generateAndLogException("Failed to get games for date: " + date, exc);
-        }
+        return facade.getGames(date);
     }
 
     private static ResponseStatusException generateAndLogException(String message, Exception e) {
@@ -89,6 +70,26 @@ public class NhlController {
         logger.error(message + " status: " + status);
 
         return new ResponseStatusException(status, message, e);
+    }
+
+    @ExceptionHandler({ NhlException.class, Exception.class })
+    @ResponseBody
+    public HashMap handleException(HttpServletRequest req, Exception ex) {
+        HashMap error = new HashMap();
+        error.put("error", true);
+        error.put("message", ex.getMessage());
+
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        if (ex instanceof NhlException) {
+            status = ((NhlException) ex).getStatus();
+        }
+
+        error.put("status", status);
+
+        logger.error(error.toString());
+
+        return error;
     }
 
 }
