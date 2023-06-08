@@ -61,21 +61,10 @@ public class NhlController {
         return facade.getGames(date);
     }
 
-    private static ResponseStatusException generateAndLogException(String message, Exception e) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        if (e instanceof NhlException)
-            status = ((NhlException) e).getStatus();
-
-        logger.error(message + " status: " + status);
-
-        return new ResponseStatusException(status, message, e);
-    }
-
     @ExceptionHandler({ NhlException.class, Exception.class })
     @ResponseBody
     public HashMap handleException(HttpServletRequest req, Exception ex) {
-        HashMap error = new HashMap();
+        HashMap<String, Object> error = new HashMap();
         error.put("error", true);
         error.put("message", ex.getMessage());
 
