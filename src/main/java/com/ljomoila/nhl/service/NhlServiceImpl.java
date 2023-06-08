@@ -49,6 +49,24 @@ public class NhlServiceImpl implements NhlService {
     }
 
     @Override
+    @Cacheable(value = "playerStats", key="{#id, #type}")
+    public LinkedTreeMap getPlayerStats(int id, String type) {
+        String json = this.client.get("/people/" + id + "/stats?stats=" + type);
+
+        HashMap retMap = new Gson().fromJson(
+                json, new TypeToken<HashMap>() {}.getType()
+        );
+
+        // TODO: create POJO for stats
+        List<LinkedTreeMap> statsMap = (List<LinkedTreeMap>) Arrays.asList(retMap.get("stats")).get(0);
+        List<LinkedTreeMap> seasonsMap = (List<LinkedTreeMap>) statsMap.get(0).get("splits");
+
+        LinkedTreeMap currentSeasonsStats = seasonsMap.get(seasonsMap.size() - 1);
+
+        return (LinkedTreeMap) currentSeasonsStats.get("stat");
+    }
+
+    @Override
     @Cacheable(value = "games", key = "#date")
     public List<String> getScheduleGamesByDate(String date) {
         String json = this.client.get("/schedule?date=" + date);
@@ -57,11 +75,12 @@ public class NhlServiceImpl implements NhlService {
                 json, new TypeToken<HashMap<String, Object>>() {}.getType()
         );
 
-        // TODO: create POJO's
+        // TODO: create POJO
         List<LinkedTreeMap> dates = (List<LinkedTreeMap>) Arrays.asList(retMap.get("dates")).get(0);
 
         if (dates.size() == 0) return Collections.emptyList();
 
+        // TODO: create POJO
         List<LinkedTreeMap> games = (List<LinkedTreeMap>) dates.get(0).get("games");
 
         List<String> gamePaths = new ArrayList<>();

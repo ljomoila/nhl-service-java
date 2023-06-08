@@ -21,6 +21,7 @@ public class CachingConfig {
                 new ConcurrentMapCache("team"),
                 new ConcurrentMapCache("games"),
                 new ConcurrentMapCache("players"),
+                new ConcurrentMapCache("playerStats"),
                 new ConcurrentMapCache("player")));
 
         return cacheManager;

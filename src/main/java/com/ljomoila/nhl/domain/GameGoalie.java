@@ -24,7 +24,7 @@ public class GameGoalie extends GamePlayer {
     }
 
     public String getSavePercentage() {
-        return new DecimalFormat("#.##").format(savePercentage) + "%";
+        return new DecimalFormat("#.##").format(savePercentage);
     }
 
     @Override

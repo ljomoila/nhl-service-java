@@ -29,6 +29,11 @@ public class NhlFacadeImpl implements NhlFacade {
     }
 
     @Override
+    public LinkedTreeMap getPlayerStats(int id, String type) {
+        return this.service.getPlayerStats(id, type);
+    }
+
+    @Override
     public List<Game> getGames(String date) {
         List<Team> teams = this.getTeams();
         List<String> gamePaths = this.service.getScheduleGamesByDate(date);
@@ -109,7 +114,27 @@ public class NhlFacadeImpl implements NhlFacade {
             if (playerWithStats != null) playersWithStats.add((playerWithStats));
         }
 
+        playersWithStats = sortPlayersWithStats(playersWithStats);
+
         return new GameTeam(teamId.intValue(), teamName, goals, playersWithStats, apiLink);
+    }
+
+    // Sorts game players by position and points, with the emphases on goals
+    private List<GamePlayer> sortPlayersWithStats(List<GamePlayer> players) {
+        Comparator<GamePlayer> pointsComparison = (GamePlayer a, GamePlayer b) -> {
+            int pointsA = a.getGoals() + a.getAssists();
+            int pointsB = b.getGoals() + b.getAssists();
+            int comparison = pointsA > pointsB ? -1 : 1;
+
+            if (pointsA == pointsB) comparison = a.getGoals() > b.getGoals() ? -1 : 1;
+
+            return comparison;
+        };
+
+        Collections.sort(players, pointsComparison);
+        players.sort(Comparator.comparing(GamePlayer::getPosition));
+
+        return players;
     }
 
     private GamePlayer constructSkater(String apiLink, LinkedTreeMap skaterStats) {

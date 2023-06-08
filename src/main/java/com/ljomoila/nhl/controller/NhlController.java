@@ -1,5 +1,6 @@
 package com.ljomoila.nhl.controller;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.ljomoila.nhl.domain.Game;
 import com.ljomoila.nhl.domain.Player;
 import com.ljomoila.nhl.domain.Team;
@@ -13,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -52,6 +54,19 @@ public class NhlController {
         }
     }
 
+    @GetMapping("/player/{id}/stats/{type}")
+    @ResponseBody
+    public LinkedTreeMap getPlayerStats(@PathVariable int id, @PathVariable String type) {
+        logger.info("Getting player stats: " +  id + " type: " + type);
+
+        try {
+            return facade.getPlayerStats(id, type);
+        }
+        catch (Exception exc) {
+            throw generateAndLogException("Failed to get player stats", exc);
+        }
+    }
+
     @GetMapping("/games/{date}")
     @ResponseBody
     public List<Game> getGames(@PathVariable String date) {
@@ -61,7 +76,7 @@ public class NhlController {
             return facade.getGames(date);
         }
         catch (Exception exc) {
-            throw generateAndLogException("Failed to get games, for date: " + date, exc);
+            throw generateAndLogException("Failed to get games for date: " + date, exc);
         }
     }
 
