@@ -11,8 +11,8 @@ public class GamePlayer extends Player {
     public GamePlayer() {
     }
 
-    public GamePlayer(int id, String lastName, String nationality, int assists, int goals, String apiLink) {
-        super(id, null, lastName, nationality, apiLink);
+    public GamePlayer(int id, String fullName, String lastName, String nationality, int assists, int goals, String apiLink) {
+        super(id, fullName, lastName, nationality, apiLink);
 
         this.assists = assists;
         this.goals = goals;

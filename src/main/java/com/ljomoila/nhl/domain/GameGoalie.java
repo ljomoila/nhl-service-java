@@ -7,8 +7,8 @@ public class GameGoalie extends GamePlayer {
     private int saves;
     private Double savePercentage;
 
-    public GameGoalie(int id, String lastName, String nationality, int assists, int goals, int shots, int saves, Double savePercentage, String apiLink) {
-        super(id, lastName, nationality, assists, goals, apiLink);
+    public GameGoalie(int id, String fullName, String lastName, String nationality, int assists, int goals, int shots, int saves, Double savePercentage, String apiLink) {
+        super(id, fullName, lastName, nationality, assists, goals, apiLink);
 
         this.shots = shots;
         this.saves = saves;

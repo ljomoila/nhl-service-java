@@ -3,6 +3,7 @@ package com.ljomoila.nhl.integration;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
@@ -18,18 +19,18 @@ import static org.mockito.Mockito.when;
 public class NhlClientTest {
     @Mock
     RestTemplate restTemplate;
-
+    
     NhlClient client;
 
     @Before
     public void setup() {
-        client = new NhlClient(restTemplate);
+        client = new NhlClient(restTemplate, "http://localhost", "/api/v1");
     }
 
     @Test
     public void testGetWithOkResponse() {
         // given
-        when(restTemplate.getForEntity("https://statsapi.web.nhl.com/api/v1/teams", String.class)).thenReturn(new ResponseEntity<>("OK", HttpStatus.OK));
+        when(restTemplate.getForEntity("http://localhost/api/v1/teams", String.class)).thenReturn(new ResponseEntity<>("OK", HttpStatus.OK));
 
         // when
         String response = client.get("/teams");
@@ -41,7 +42,7 @@ public class NhlClientTest {
     @Test
     public void testGetWithOkResponseAndApiPath() {
         // given
-        when(restTemplate.getForEntity("https://statsapi.web.nhl.com/api/v1/teams", String.class)).thenReturn(new ResponseEntity<>("OK", HttpStatus.OK));
+        when(restTemplate.getForEntity("http://localhost/api/v1/teams", String.class)).thenReturn(new ResponseEntity<>("OK", HttpStatus.OK));
 
         // when
         String response = client.get("/api/v1/teams");

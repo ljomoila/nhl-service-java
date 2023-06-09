@@ -53,7 +53,7 @@ public class Player {
     public String toString() {
         return "Player{" +
                 "id=" + id +
-                ", name='" + fullName + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", nationality='" + nationality + '\'' +
                 ", apiLink='" + apiLink + '\'' +

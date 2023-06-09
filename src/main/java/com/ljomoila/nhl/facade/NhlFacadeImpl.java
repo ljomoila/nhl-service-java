@@ -4,6 +4,8 @@ package com.ljomoila.nhl.facade;
 import com.google.gson.internal.LinkedTreeMap;
 import com.ljomoila.nhl.domain.*;
 import com.ljomoila.nhl.service.NhlServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,8 @@ import java.util.*;
 
 @Component
 public class NhlFacadeImpl implements NhlFacade {
+    private static final Logger logger = LoggerFactory.getLogger(NhlFacadeImpl.class);
+
     private final NhlServiceImpl service;
 
     @Autowired
@@ -145,7 +149,7 @@ public class NhlFacadeImpl implements NhlFacade {
 
         Player player = this.getPlayer(apiLink);
 
-        return new GamePlayer(player.getId(), player.getLastName(), player.getNationality(), assists, goals,
+        return new GamePlayer(player.getId(), player.getFullName(), player.getLastName(), player.getNationality(), assists, goals,
                 apiLink);
     }
 
@@ -161,7 +165,7 @@ public class NhlFacadeImpl implements NhlFacade {
         int goals = goalieStats.get("_goals") != null ? (int)  Math.round((Double) goalieStats.get("_goals")) : 0;
         int assists = goalieStats.get("_assists") != null ? (int) Math.round((Double) goalieStats.get("_assists")) : 0;
 
-        return new GameGoalie(player.getId(), player.getLastName(), player.getNationality(), assists, goals, shots,
+        return new GameGoalie(player.getId(), player.getFullName(), player.getLastName(), player.getNationality(), assists, goals, shots,
                 saves, (Double) savePercentage, apiLink);
     }
 }

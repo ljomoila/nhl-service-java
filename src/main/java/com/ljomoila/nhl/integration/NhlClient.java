@@ -12,19 +12,20 @@ import org.springframework.web.client.RestTemplate;
 public class NhlClient {
     private final RestTemplate restTemplate;
 
-    @Value( "${nhl.api.url}" )
-    private String apiBaseUrl;
+    private final String apiBaseUrl;
+    private final String apiPath;
 
-    @Value( "${nhl.api.path}" )
-    private String apiPath;
-
-    public NhlClient(RestTemplate restTemplate) {
+    public NhlClient(RestTemplate restTemplate, @Value( "${nhl.api.url}") String apiBaseUrl,
+                     @Value( "${nhl.api.path}") String apiPath) {
         this.restTemplate = restTemplate;
+        this.apiBaseUrl = apiBaseUrl;
+        this.apiPath = apiPath;
     }
 
     public String get(String path) {
         try {
-            ResponseEntity<String> response = this.restTemplate.getForEntity(constructUrlWithPath(path), String.class);
+            String url = constructUrlWithPath(path);
+            ResponseEntity<String> response = this.restTemplate.getForEntity(url, String.class);
 
             if (response.getStatusCodeValue() != HttpStatus.SC_OK) {
                 throw new NhlException("Invalid status", org.springframework.http.HttpStatus.valueOf(response.getStatusCodeValue()));
