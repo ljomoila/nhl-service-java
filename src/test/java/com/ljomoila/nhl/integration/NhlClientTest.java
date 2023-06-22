@@ -1,5 +1,6 @@
 package com.ljomoila.nhl.integration;
 
+import com.ljomoila.nhl.exception.NhlException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,9 +63,9 @@ public class NhlClientTest {
             client.get("/teams");
 
             assertEquals(false, true);
-        } catch(Exception e) {
+        } catch(NhlException e) {
             // then
-            assertEquals(true, true);
+            assertEquals(e.getStatus(), HttpStatus.FORBIDDEN);
         }
     }
 }
