@@ -39,20 +39,19 @@ public class NhlFacadeImpl implements NhlFacade {
 
     @Override
     public List<Game> getGames(String date) {
-        List<Team> teams = this.getTeams();
         List<String> gamePaths = this.service.getScheduleGamesByDate(date);
         List<Game> games = new ArrayList<>();
 
         for (String path : gamePaths) {
            LiveFeed liveFeed = this.service.getLiveFeed(path);
 
-           games.add(this.constructGame(liveFeed, teams));
+           games.add(this.constructGame(liveFeed));
         }
 
         return games;
     }
 
-    private Game constructGame(LiveFeed liveFeed, List<Team> teams) {
+    private Game constructGame(LiveFeed liveFeed) {
         GameData gameData = liveFeed.getGameData();
         LiveData liveData = liveFeed.getLiveData();
 
@@ -75,6 +74,7 @@ public class NhlFacadeImpl implements NhlFacade {
         GameTeam awayTeam = this.constructGameTeam((LinkedTreeMap) teamLineScores.get("away"),
                 (LinkedTreeMap) teamBoxScores.get("away"));
 
+        List<Team> teams = this.getTeams();
         // find and set short names for teams
         for (Team team :teams) {
             if (team.getId() == homeTeam.getId()) homeTeam.setShortName(team.getShortName());
