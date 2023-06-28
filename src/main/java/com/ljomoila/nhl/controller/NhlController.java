@@ -6,6 +6,7 @@ import com.ljomoila.nhl.domain.Player;
 import com.ljomoila.nhl.domain.Team;
 import com.ljomoila.nhl.exception.NhlException;
 import com.ljomoila.nhl.facade.NhlFacadeImpl;
+import io.swagger.annotations.ApiOperation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ public class NhlController {
         this.facade = facade;
     }
 
+    @ApiOperation(value = "All teams")
     @GetMapping("/teams")
     public List<Team> getTeams() {
         logger.info("Getting teams");
@@ -36,14 +38,16 @@ public class NhlController {
         return facade.getTeams();
     }
 
-    @GetMapping("/player/{apiLink}")
+    @ApiOperation(value = "Player by id")
+    @GetMapping("/player/{id}")
     @ResponseBody
-    public Player getPlayer(@PathVariable String apiLink) {
-        logger.info("Getting player with api link: " +  apiLink);
+    public Player getPlayer(@PathVariable String id) {
+        logger.info("Getting player by id: " +  id);
 
-        return facade.getPlayer(apiLink);
+        return facade.getPlayer(id);
     }
 
+    @ApiOperation(value = "Player stats by id and type")
     @GetMapping("/player/{id}/stats/{type}")
     @ResponseBody
     public LinkedTreeMap getPlayerStats(@PathVariable int id, @PathVariable String type) {
@@ -52,6 +56,7 @@ public class NhlController {
         return facade.getPlayerStats(id, type);
     }
 
+    @ApiOperation(value = "All scheduled games and stats by date")
     @GetMapping("/games/{date}")
     @ResponseBody
     public List<Game> getGames(@PathVariable String date) {
