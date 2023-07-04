@@ -1,0 +1,15 @@
+version: '2'
+services:
+    nhl-service:
+        container_name: nhl-service
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: nhl-service:latest
+        ports:
+            - 8080:8080
+        networks:
+            - spring-cloud-network
+networks:
+    spring-cloud-network:
+        driver: bridge

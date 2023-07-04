@@ -5,7 +5,6 @@ Purpose of the service is to map data from NHL api to more usable form for the c
 
 ## Docker
 
--   `docker build -t nhl-service .` - Creates a docker image
--   `docker run -d -p 8080:8080 --name dockerspringboot nhl-service:latest` - Create a docker container
--   `docker container ps` - Verify whether the container has been created successfully
+-   `docker-compose up --build` - starts nhl-service
 -   Navigate to `http://localhost:8080/teams` to view application.
+-   `docker-compose down` - stops container
